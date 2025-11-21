@@ -1,4 +1,4 @@
-import { Square } from '../controllers';
+import { Square } from '../state';
 import { Coord } from '../types';
 import { Move } from './abstract';
 

@@ -1,19 +1,19 @@
-import { Square } from '../controllers';
+import { Square } from '../state';
 import { Coord } from '../types';
 import { Bishop, Knight, Queen, Rook } from '../pieces';
 import { Move } from './abstract';
 import { BadInputException } from '../utils';
 
 export class PromotionMove extends Move {
-  execute(boardMap: Map<Coord, Square>, options: { advancesTo?: 'r' | 'n' | 'b' | 'q' } = {}): Map<Coord, Square> {
-    if (!options.advancesTo) {
+  execute(boardMap: Map<Coord, Square>): Map<Coord, Square> {
+    if (!this.options.advancesTo) {
       throw new BadInputException(
         'Promotion move has to receive `advancesTo` option specifying to which piece the pawn will be promoted'
       );
     }
 
     boardMap.set(this.from.coord, new Square(this.from, null));
-    boardMap.set(this.to.coord, new Square(this.to, this.getNewPiece(options.advancesTo)));
+    boardMap.set(this.to.coord, new Square(this.to, this.getNewPiece(this.options.advancesTo)));
 
     return boardMap;
   }

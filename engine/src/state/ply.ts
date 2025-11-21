@@ -5,12 +5,16 @@ export class Ply {
   readonly plyNo: number;
 
   static fromFEN(sideLetter: string, fullMove: string) {
-    return new this(sideLetter === 'w' ? 'white' : 'black', parseInt(fullMove));
+    const side: Color = sideLetter === 'w' ? 'white' : 'black';
+    const fullMoveNo = parseInt(fullMove);
+    const plyNo = fullMoveNo * 2 - (side === 'white' ? 1 : 0);
+
+    return new this(side, plyNo);
   }
 
-  constructor(sideToMove: Color, fullMoveNo: number) {
+  constructor(sideToMove: Color, plyNo: number) {
     this.sideToMove = sideToMove;
-    this.plyNo = fullMoveNo * 2 - (sideToMove === 'white' ? 1 : 0);
+    this.plyNo = plyNo;
   }
 
   afterMove() {

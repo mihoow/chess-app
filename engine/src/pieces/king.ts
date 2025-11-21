@@ -2,12 +2,12 @@ import { CaptureMove, Move, SimpleMove } from '../moves';
 import { Position } from '../utils/position';
 import { Coord, Direction } from '../types';
 import { Piece } from './abstract';
-import { Controller } from '../controllers';
+import { IController } from '../state';
 
 export class King extends Piece {
   readonly name = 'King';
 
-  private generateSimpleMoves(currPosition: Position, { board }: Controller): Map<Coord, Move> {
+  private generateSimpleMoves(currPosition: Position, { board }: IController): Map<Coord, Move> {
     const possibleEndPositions = [
       currPosition.moveByDirection(Direction.UP),
       currPosition.moveByDirection(Direction.UP_RIGHT),
@@ -38,7 +38,7 @@ export class King extends Piece {
     return new Map();
   }
 
-  generatePossibleMoves(currPosition: Position, controller: Controller): Map<Coord, Move> {
+  generatePossibleMoves(currPosition: Position, controller: IController): Map<Coord, Move> {
     return new Map([...this.generateSimpleMoves(currPosition, controller), ...this.generateCastlingMoves()]);
   }
 }

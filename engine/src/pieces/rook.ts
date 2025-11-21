@@ -2,12 +2,12 @@ import { CaptureMove, Move, SimpleMove } from '../moves';
 import { Position } from '../utils/position';
 import { Coord, Direction } from '../types';
 import { Piece } from './abstract';
-import { Controller } from '../controllers';
+import { IController } from '../controller';
 
 export class Rook extends Piece {
   readonly name = 'Rook';
 
-  generatePossibleMoves(currPosition: Position, { board }: Controller): Map<Coord, Move> {
+  generatePossibleMoves(currPosition: Position, { board }: IController): Map<Coord, Move> {
     const directions = [Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT];
 
     const moves = new Map<Coord, Move>();

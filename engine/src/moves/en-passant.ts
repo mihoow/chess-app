@@ -1,4 +1,4 @@
-import { Square } from '../controllers';
+import { Square } from '../state';
 import { Coord } from '../types';
 import { InternalStateException } from '../utils';
 import { Move } from './abstract';

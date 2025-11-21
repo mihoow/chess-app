@@ -1,7 +1,7 @@
 import { Move } from '../moves';
 import { Position } from '../utils/position';
 import { Color, Coord } from '../types';
-import { Controller } from '../controllers';
+import { IController } from '../controller';
 
 export abstract class Piece {
   abstract readonly name: string;
@@ -11,5 +11,5 @@ export abstract class Piece {
     this.side = side;
   }
 
-  abstract generatePossibleMoves(currPosition: Position, controller: Controller): Map<Coord, Move>;
+  abstract generatePossibleMoves(currPosition: Position, controller: IController): Map<Coord, Move>;
 }

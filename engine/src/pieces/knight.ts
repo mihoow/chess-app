@@ -2,12 +2,12 @@ import { CaptureMove, Move, SimpleMove } from '../moves';
 import { Position } from '../utils/position';
 import { Coord } from '../types';
 import { Piece } from './abstract';
-import { Controller } from '../controllers';
+import { IController } from '../controller';
 
 export class Knight extends Piece {
   readonly name = 'Knight';
 
-  generatePossibleMoves(currPosition: Position, { board }: Controller): Map<Coord, Move> {
+  generatePossibleMoves(currPosition: Position, { board }: IController): Map<Coord, Move> {
     const possibleEndPositions = [
       currPosition.moveY(2)?.moveX(1),
       currPosition.moveX(2)?.moveY(1),

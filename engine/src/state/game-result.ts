@@ -4,7 +4,7 @@ import { Color, GameStatus } from '../types';
 import { InternalStateException, KingExposedException, Position } from '../utils';
 import { PossibleMoves } from '../utils/possible-moves';
 import { Board } from './board';
-import { Controller } from './controller';
+import { Controller } from '../controller';
 
 export class GameResult {
   readonly halfMoveClock: number;
@@ -30,9 +30,12 @@ export class GameResult {
 
   private isCurrSideKingAttacked(controller: Controller, nextBoard: Board): boolean {
     const currSide = controller.ply.sideToMove;
-    const oppositeSideMoves = new PossibleMoves(controller, {
-      side: currSide === 'white' ? 'black' : 'white',
-    });
+    const oppositeSideMoves = new PossibleMoves(
+      { ...controller, board: nextBoard },
+      {
+        side: currSide === 'white' ? 'black' : 'white',
+      }
+    );
 
     let currSideKingPosition: Position | null = null;
     nextBoard.forEachSquare((position, square) => {

@@ -3,7 +3,7 @@ import { Pawn } from '../pieces';
 import { InternalStateException } from '../utils';
 import { Position } from '../utils/position';
 import { Board } from './board';
-import { Controller } from './controller';
+import { Controller } from '../controller';
 
 export class EnPassant {
   readonly targetPosition: Position | null;

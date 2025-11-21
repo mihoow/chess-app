@@ -1,13 +1,13 @@
-import { GameResult } from './game-result';
-import { Ply } from './ply';
-import { MovePayload } from '../types';
-import { EnPassant } from './en-passant';
-import { Board } from './board';
-import { CastlingRights } from './castling-rights';
-import { PossibleMoves } from '../utils/possible-moves';
-import { IllegalMoveException } from '../utils';
+import { GameResult } from './state/game-result';
+import { Ply } from './state/ply';
+import { MovePayload } from './types';
+import { EnPassant } from './state/en-passant';
+import { Board } from './state/board';
+import { CastlingRights } from './state/castling-rights';
+import { PossibleMoves } from './utils/possible-moves';
+import { IllegalMoveException } from './utils';
 
-interface IController {
+export interface IController {
   board: Board;
   ply: Ply;
   gameResult: GameResult;
@@ -49,7 +49,10 @@ export class Controller implements IController {
     const possibleMoves = new PossibleMoves(this, { side: this.ply.sideToMove });
     const move = possibleMoves.findMove(payload);
 
-    if (!move) throw new IllegalMoveException(`Move not allowed: ${payload}`);
+    if (!move) {
+      const { from, to } = payload;
+      throw new IllegalMoveException(`Move not allowed: ${from} -> ${to}`);
+    }
 
     const nextBoard = this.board.afterMove(move);
     const nextGameResult = this.gameResult.afterMove(move, this, nextBoard);
@@ -71,7 +74,7 @@ export class Controller implements IController {
       this.board.toFEN(),
       this.ply.sideToMove[0],
       this.castlingRights.toFEN(),
-      this.enPassant.toFEN,
+      this.enPassant.toFEN(),
       this.gameResult.halfMoveClock,
       this.ply.fullMove,
     ].join(' ');

@@ -1,7 +1,7 @@
 import { CaptureMove, Move } from '../moves';
 import { King, Rook } from '../pieces';
 import { Board } from './board';
-import { Controller } from './controller';
+import { Controller } from '../controller';
 
 interface ICastlingRights {
   whiteKingSide: boolean;

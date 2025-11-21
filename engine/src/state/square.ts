@@ -1,8 +1,3 @@
-/*
- Files - columns (a -> h)
- Ranks - rows (1 -> 8)
-*/
-
 import { Position } from '../utils/position';
 import { Bishop, King, Knight, Pawn, Piece, Queen, Rook } from '../pieces';
 import { Color } from '../types';
@@ -48,19 +43,23 @@ export class Square {
   }
 
   private calculateSquareColor(coord: Position): Color {
-    return (coord.fileNo + coord.rank) % 2 === 0 ? 'white' : 'black';
+    return (coord.fileNo + coord.rank) % 2 === 0 ? 'black' : 'white';
   }
 
   getPieceLetter(): string | null {
     if (!this.piece) return null;
 
-    if (this.piece instanceof Pawn) return 'p';
-    if (this.piece instanceof Rook) return 'r';
-    if (this.piece instanceof Knight) return 'n';
-    if (this.piece instanceof Bishop) return 'b';
-    if (this.piece instanceof Queen) return 'q';
-    if (this.piece instanceof King) return 'k';
+    const letter = (() => {
+      if (this.piece instanceof Pawn) return 'p';
+      if (this.piece instanceof Rook) return 'r';
+      if (this.piece instanceof Knight) return 'n';
+      if (this.piece instanceof Bishop) return 'b';
+      if (this.piece instanceof Queen) return 'q';
+      if (this.piece instanceof King) return 'k';
 
-    throw new InternalStateException(`Unknown piece: ${this.piece}`);
+      throw new InternalStateException(`Unknown piece: ${this.piece}`);
+    })();
+
+    return this.piece.side === 'white' ? letter.toUpperCase() : letter;
   }
 }

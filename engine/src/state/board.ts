@@ -11,8 +11,8 @@ export class Board {
 
     const ranks = piecePlacement.split('/');
     ranks.forEach((rank, rankIndex) => {
+      let currFileNo = 1;
       for (const c of rank) {
-        let currFileNo = 1;
         const isNumber = !isNaN(parseInt(c));
 
         if (isNumber) {
