@@ -31,6 +31,7 @@ export class Queen extends Piece {
           moves.set(position.coord, new SimpleMove(this, currPosition, position));
         } else if (square.piece.side !== this.side) {
           moves.set(position.coord, new CaptureMove(this, currPosition, position));
+          break;
         } else {
           break;
         }
