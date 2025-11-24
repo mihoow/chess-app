@@ -1,6 +1,10 @@
 export abstract class ChessException extends Error {
   abstract code: string;
   abstract description: string;
+
+  static isException(err: unknown): err is ChessException {
+    return typeof err === 'object' && err !== null && 'code' in err && 'description' in err;
+  }
 }
 
 export class InternalStateException extends ChessException {
