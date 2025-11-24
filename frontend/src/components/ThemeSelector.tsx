@@ -1,14 +1,13 @@
-import { useState } from 'react';
 import { cn } from '../utils/class-name';
-import type { BoardThemeId } from '../type';
 import { THEMES } from '../config';
+import { useGameContext } from '../context';
 
 type ThemeSelectorProps = Readonly<{
   className?: string;
 }>;
 
 export function ThemeSelector({ className }: ThemeSelectorProps) {
-  const [selectedThemeId, setSelectedThemeId] = useState<BoardThemeId>('forest');
+  const { themeId, changeTheme } = useGameContext();
 
   return (
     <div
@@ -20,13 +19,13 @@ export function ThemeSelector({ className }: ThemeSelectorProps) {
       )}
     >
       {THEMES.map((theme) => {
-        const isSelected = theme.id === selectedThemeId;
+        const isSelected = theme.id === themeId;
 
         return (
           <button
             key={theme.id}
             type='button'
-            onClick={() => setSelectedThemeId(theme.id)}
+            onClick={() => changeTheme(theme.id)}
             className={cn(
               'relative rounded-md p-1',
               'transition-transform',

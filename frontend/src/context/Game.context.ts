@@ -1,5 +1,5 @@
 import { createContext, use } from 'react';
-import type { GameState } from '../type';
+import type { BoardThemeId, GameState } from '../type';
 
 export type MakeMoveResult =
   | {
@@ -11,8 +11,11 @@ export type MakeMoveResult =
     };
 
 export type GameContextType = GameState & {
+  themeId: BoardThemeId;
+
   makeMove(fromCoord: string, toCoord: string): MakeMoveResult;
   reset(): void;
+  changeTheme: (themeId: BoardThemeId) => void;
 };
 
 export const GameContext = createContext<GameContextType | null>(null);

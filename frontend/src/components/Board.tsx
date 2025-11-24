@@ -16,6 +16,7 @@ import bQueen from '../assets/black-queen-svgrepo-com.svg';
 import bKing from '../assets/black-king-svgrepo-com.svg';
 import { cn } from '../utils/class-name';
 import { useGameContext } from '../context';
+import { THEMES } from '../config';
 
 function getImageSrc(pieceName: string, side: Color) {
   switch (pieceName) {
@@ -36,8 +37,9 @@ function getImageSrc(pieceName: string, side: Color) {
 
 export function Board() {
   const [selectedFromCoord, setSelectedFromCoord] = useState<Coord | null>(null);
+  const { sideToMove, board, themeId, makeMove } = useGameContext();
 
-  const { sideToMove, board, makeMove } = useGameContext();
+  const currTheme = THEMES.find(({ id }) => id === themeId)!;
 
   const squares: ReactNode[] = [];
   board.forEach(([position, square]) => {
@@ -48,7 +50,10 @@ export function Board() {
     squares.push(
       <div
         key={position.coord}
-        style={{ gridArea: position.coord, backgroundColor: square.color === 'white' ? '#eeeeda' : '#4d6b3c' }}
+        style={{
+          gridArea: position.coord,
+          backgroundColor: square.color === 'white' ? currTheme.light : currTheme.dark,
+        }}
         className={cn(
           'group relative border border-[#3b522e] transition-colors select-none',
           'flex items-center justify-center',

@@ -1,4 +1,3 @@
-
 export const THEMES = [
   {
     id: 'classic',

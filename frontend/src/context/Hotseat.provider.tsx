@@ -3,6 +3,7 @@ import { useRef, type PropsWithChildren, useState } from 'react';
 import { GameContext, type MakeMoveResult } from './Game.context';
 import { Game, type Coord } from '@chess-app/engine';
 import type { GameState } from '../type';
+import { useBoardTheme } from '../hooks/useBoardTheme';
 
 function useGame() {
   const gameRef = useRef<Game | null>(null);
@@ -36,6 +37,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
       board: game.getBoard(),
     };
   });
+  const themeHook = useBoardTheme();
 
   const makeMove = (fromCoord: Coord, toCoord: Coord): MakeMoveResult => {
     const game = gameRef.current();
@@ -82,6 +84,8 @@ export function HotseatProvider({ children }: PropsWithChildren) {
 
         makeMove,
         reset,
+
+        ...themeHook,
       }}
     >
       {children}
