@@ -15,6 +15,7 @@ import bBishop from '../assets/black-bishop-svgrepo-com.svg';
 import bQueen from '../assets/black-queen-svgrepo-com.svg';
 import bKing from '../assets/black-king-svgrepo-com.svg';
 import { cn } from '../utils/class-name';
+import { useGameContext } from '../context';
 
 function getImageSrc(pieceName: string, side: Color) {
   switch (pieceName) {
@@ -36,11 +37,10 @@ function getImageSrc(pieceName: string, side: Color) {
 export function Board() {
   const [selectedFromCoord, setSelectedFromCoord] = useState<Coord | null>(null);
 
-  const game = new Game();
-  const sideToMove: Color = 'white';
+  const { sideToMove, board, makeMove } = useGameContext();
 
   const squares: ReactNode[] = [];
-  game.forEachSquare((position, square) => {
+  board.forEach(([position, square]) => {
     const isSelectable = square.piece && square.piece.side === sideToMove;
     const isHoverable = selectedFromCoord && square.piece?.side !== sideToMove;
     const isSelected = selectedFromCoord === position.coord;
@@ -60,7 +60,11 @@ export function Board() {
           if (isSelectable) {
             setSelectedFromCoord(position.coord);
           } else if (isHoverable) {
-            // TODO: Try making a move
+            const result = makeMove(selectedFromCoord, position.coord);
+            if (!result.ok) return;
+
+            setSelectedFromCoord(null);
+            result.finalize();
           }
         }}
       >

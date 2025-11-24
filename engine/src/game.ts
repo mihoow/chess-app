@@ -30,8 +30,18 @@ export class Game {
     return this.controller.gameResult.winner;
   }
 
-  forEachSquare(callback: (position: Position, square: Square) => void) {
-    this.controller.board.forEachSquare(callback);
+  get sideToMove(): Color {
+    return this.controller.ply.sideToMove;
+  }
+
+  getBoard(): Array<[Position, Square]> {
+    const result: Array<[Position, Square]> = [];
+
+    this.controller.board.forEachSquare((position, square) => {
+      result.push([position, square]);
+    });
+
+    return result;
   }
 
   getFEN(): string {

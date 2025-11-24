@@ -1,18 +1,18 @@
-import type { Color } from "@chess-app/engine";
-import { cn } from "../utils/class-name";
+import { cn } from '../utils/class-name';
+import { useGameContext } from '../context';
 
 type ToolbarProps = Readonly<{
   className?: string;
-  sideToMove: Color;
   onPrev?: () => void;
   onNext?: () => void;
-  onReset?: () => void;
 }>;
 
-export function Toolbar({ className, sideToMove, onPrev, onNext, onReset }: ToolbarProps) {
+export function Toolbar({ className, onPrev, onNext }: ToolbarProps) {
+  const { sideToMove, reset } = useGameContext();
+
   const handleResetClick = () => {
     if (window.confirm('Reset the game?')) {
-      onReset?.();
+      reset();
     }
   };
 
