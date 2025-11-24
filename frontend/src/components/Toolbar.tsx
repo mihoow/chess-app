@@ -3,12 +3,10 @@ import { useGameContext } from '../context';
 
 type ToolbarProps = Readonly<{
   className?: string;
-  onPrev?: () => void;
-  onNext?: () => void;
 }>;
 
-export function Toolbar({ className, onPrev, onNext }: ToolbarProps) {
-  const { sideToMove, reset } = useGameContext();
+export function Toolbar({ className }: ToolbarProps) {
+  const { sideToMove, history, reset } = useGameContext();
 
   const handleResetClick = () => {
     if (window.confirm('Reset the game?')) {
@@ -36,34 +34,40 @@ export function Toolbar({ className, onPrev, onNext }: ToolbarProps) {
           </div>
         </div>
 
-        <div className='inline-flex rounded-md shadow-sm overflow-hidden border border-slate-700'>
-          <button
-            type='button'
-            onClick={onPrev}
-            className={cn(
-              'px-3 h-8 text-xs font-medium',
-              'bg-slate-800 text-slate-200',
-              'hover:bg-slate-700',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400',
-              'transition-colors'
-            )}
-          >
-            ◀
-          </button>
-          <button
-            type='button'
-            onClick={onNext}
-            className={cn(
-              'px-3 h-8 text-xs font-medium',
-              'bg-slate-800 text-slate-200 border-l border-slate-700',
-              'hover:bg-slate-700',
-              'focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400',
-              'transition-colors'
-            )}
-          >
-            ▶
-          </button>
-        </div>
+        {history && (
+          <div className='inline-flex rounded-md shadow-sm overflow-hidden border border-slate-700'>
+            <button
+              type='button'
+              onClick={history.goBack}
+              disabled={!history.canGoBack}
+              className={cn(
+                'px-3 h-8 text-xs font-medium',
+                'bg-slate-800 text-slate-200',
+                'hover:bg-slate-700',
+                'focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400',
+                'transition-colors',
+                'disabled:bg-slate-700/50 disabled:text-slate-400 disabled:cursor-not-allowed disabled:hover:bg-slate-700/50'
+              )}
+            >
+              ◀
+            </button>
+            <button
+              type='button'
+              onClick={history.goForward}
+              disabled={!history.canGoForward}
+              className={cn(
+                'px-3 h-8 text-xs font-medium',
+                'bg-slate-800 text-slate-200 border-l border-slate-700',
+                'hover:bg-slate-700',
+                'focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400',
+                'transition-colors',
+                'disabled:bg-slate-700/50 disabled:text-slate-400 disabled:cursor-not-allowed disabled:hover:bg-slate-700/50'
+              )}
+            >
+              ▶
+            </button>
+          </div>
+        )}
       </div>
 
       <button

@@ -5,20 +5,27 @@ import { Game, type Coord, ChessException } from '@chess-app/engine';
 import type { GameState } from '../type';
 import { useBoardTheme } from '../hooks/useBoardTheme';
 import { toast } from 'sonner';
+import { useHistory, useHistoryApi, type LocalHistory } from '../hooks/useHotSeatHistory';
 
-function useGame() {
+function useGame(history?: LocalHistory) {
   const gameRef = useRef<Game | null>(null);
 
   return {
     current: () => {
       if (!gameRef.current) {
-        gameRef.current = new Game();
+        gameRef.current = new Game(history?.currentFEN);
       }
 
       return gameRef.current;
     },
     reset: () => {
       gameRef.current = new Game();
+      history?.reset();
+
+      return gameRef.current;
+    },
+    forceState: (FEN: string) => {
+      gameRef.current = new Game(FEN);
 
       return gameRef.current;
     },
@@ -68,7 +75,8 @@ function handleEngineException(err: unknown) {
 }
 
 export function HotseatProvider({ children }: PropsWithChildren) {
-  const gameRef = useGame();
+  const history = useHistory();
+  const gameRef = useGame(history);
 
   const [gameState, setGameState] = useState<GameState>(() => {
     const game = gameRef.current();
@@ -87,6 +95,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
 
     try {
       game.makeMove({ from: fromCoord, to: toCoord });
+      history.push(game.getFEN());
 
       toast.dismiss(); // delete all active toasts
 
@@ -122,6 +131,17 @@ export function HotseatProvider({ children }: PropsWithChildren) {
     });
   };
 
+  const historyAPI = useHistoryApi(history, (fen) => {
+    const game = gameRef.forceState(fen);
+
+    setGameState({
+      gameStatus: game.status,
+      winner: game.winner,
+      sideToMove: game.sideToMove,
+      board: game.getBoard(),
+    });
+  });
+
   return (
     <GameContext.Provider
       value={{
@@ -131,6 +151,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
         reset,
 
         ...themeHook,
+        history: historyAPI,
       }}
     >
       {children}
