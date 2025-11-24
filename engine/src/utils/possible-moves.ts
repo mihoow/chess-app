@@ -1,8 +1,9 @@
-import { Board, IController } from '../state';
+import { Board } from '../state';
 import { Move } from '../moves';
 import { Piece } from '../pieces';
 import { Color, Coord, MovePayload } from '../types';
 import { Position } from './position';
+import { IController } from '../controller';
 
 type Filters = {
   side?: Color;
