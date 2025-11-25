@@ -1,11 +1,11 @@
 import { CaptureMove, EnPassantMove, Move, PromotionMove, SimpleMove } from '../moves';
 import { Position } from '../utils/position';
-import { Coord, Direction } from '../types';
+import { Coord, Direction, PieceID } from '../types';
 import { Piece } from './abstract';
 import { IController } from '../controller';
 
 export class Pawn extends Piece {
-  readonly name = 'Pawn';
+  readonly id = PieceID.Pawn;
 
   generatePossibleMoves(currPosition: Position, { board, enPassant }: IController): Map<Coord, Move> {
     const moves = new Map<Coord, Move>();

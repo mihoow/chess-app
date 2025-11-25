@@ -1,15 +1,16 @@
 import { Square } from '../state';
-import { Coord } from '../types';
+import { AdvancesTo, Coord, PieceID } from '../types';
 import { Bishop, Knight, Queen, Rook } from '../pieces';
 import { Move } from './abstract';
-import { BadInputException } from '../utils';
+import { BadInputException, InternalStateException, MissingPawnPromotionChoiceException } from '../utils';
 
 export class PromotionMove extends Move {
   execute(boardMap: Map<Coord, Square>): Map<Coord, Square> {
     if (!this.options.advancesTo) {
-      throw new BadInputException(
-        'Promotion move has to receive `advancesTo` option specifying to which piece the pawn will be promoted'
-      );
+      const pawnPiece = boardMap.get(this.from.coord)?.piece;
+      if (!pawnPiece) throw new InternalStateException(`Pawn was not found at coord: ${this.from.coord}`);
+
+      throw new MissingPawnPromotionChoiceException(pawnPiece);
     }
 
     boardMap.set(this.from.coord, new Square(this.from, null));
@@ -18,20 +19,20 @@ export class PromotionMove extends Move {
     return boardMap;
   }
 
-  private getNewPiece(advancesTo: 'r' | 'n' | 'b' | 'q') {
+  private getNewPiece(advancesTo: AdvancesTo) {
     const side = this.piece.side;
 
     switch (advancesTo) {
-      case 'r':
+      case PieceID.Rook:
         return new Rook(side);
-      case 'n':
+      case PieceID.Knight:
         return new Knight(side);
-      case 'b':
+      case PieceID.Bishop:
         return new Bishop(side);
-      case 'q':
+      case PieceID.Queen:
         return new Queen(side);
       default:
-        throw new BadInputException(`Unknown letter for piece: ${advancesTo}`);
+        throw new BadInputException(`Unknown piece ID: ${advancesTo}`);
     }
   }
 }

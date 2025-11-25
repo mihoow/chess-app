@@ -1,16 +1,16 @@
 import { Square } from '../state';
-import { Coord } from '../types';
+import { AdvancesTo, Coord } from '../types';
 import { Piece } from '../pieces';
 import { Position } from '../utils/position';
 
-type Options = { advancesTo?: 'r' | 'n' | 'b' | 'q' };
+type Options = { advancesTo?: AdvancesTo };
 
 export abstract class Move {
   readonly piece: Piece;
   readonly from: Position;
   readonly to: Position;
 
-  protected options: { advancesTo?: 'r' | 'n' | 'b' | 'q' } = {};
+  protected options: Options = {};
 
   constructor(piece: Piece, from: Position, to: Position) {
     this.piece = piece;

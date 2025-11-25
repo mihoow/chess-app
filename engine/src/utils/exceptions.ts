@@ -1,3 +1,5 @@
+import { Pawn, Piece } from '../pieces';
+
 export abstract class ChessException extends Error {
   abstract code: string;
   abstract description: string;
@@ -42,4 +44,15 @@ export class GameOverException extends IllegalMoveException {
 export class BadInputException extends ChessException {
   code = 'BAD_INPUT';
   description = 'The provided input is invalid or incomplete.';
+}
+
+export class MissingPawnPromotionChoiceException extends BadInputException {
+  code = 'MISSING_PAWN_PROMOTION_CHOICE';
+  readonly pawn: Piece;
+
+  constructor(pawn: Piece) {
+    super('Promotion move has to receive `advancesTo` option specifying to which piece the pawn will be promoted');
+
+    this.pawn = pawn;
+  }
 }

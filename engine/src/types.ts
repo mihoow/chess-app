@@ -2,10 +2,21 @@ export type Color = 'white' | 'black';
 
 export type Coord = `${string}${number}`;
 
+export enum PieceID {
+  Pawn = 'p',
+  Rook = 'r',
+  Knight = 'n',
+  Bishop = 'b',
+  Queen = 'q',
+  King = 'k',
+}
+
+export type AdvancesTo = PieceID.Rook | PieceID.Bishop | PieceID.Knight | PieceID.Queen;
+
 export type MovePayload = {
   from: Coord;
   to: Coord;
-  advancesTo?: 'r' | 'n' | 'b' | 'q';
+  advancesTo?: AdvancesTo;
 };
 
 export enum Direction {

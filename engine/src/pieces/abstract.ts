@@ -1,10 +1,10 @@
 import { Move } from '../moves';
 import { Position } from '../utils/position';
-import { Color, Coord } from '../types';
+import { Color, Coord, PieceID } from '../types';
 import { IController } from '../controller';
 
 export abstract class Piece {
-  abstract readonly name: string;
+  abstract readonly id: PieceID;
   readonly side: Color;
 
   constructor(side: Color) {

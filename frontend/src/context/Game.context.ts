@@ -14,7 +14,7 @@ export type GameContextType = GameState & {
   themeId: BoardThemeId;
   history?: IHistory;
 
-  makeMove(fromCoord: string, toCoord: string): MakeMoveResult;
+  makeMove(fromCoord: string, toCoord: string): MakeMoveResult | Promise<MakeMoveResult>;
   reset(): void;
   changeTheme: (themeId: BoardThemeId) => void;
 };

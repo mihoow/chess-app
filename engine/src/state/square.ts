@@ -1,6 +1,6 @@
 import { Position } from '../utils/position';
 import { Bishop, King, Knight, Pawn, Piece, Queen, Rook } from '../pieces';
-import { Color } from '../types';
+import { Color, PieceID } from '../types';
 import { BadInputException, InternalStateException } from '../utils';
 
 export class Square {
@@ -13,17 +13,17 @@ export class Square {
     const side: Color = isWhite ? 'white' : 'black';
 
     switch (pieceLetter.toLowerCase()) {
-      case 'p':
+      case PieceID.Pawn:
         return new Pawn(side);
-      case 'r':
+      case PieceID.Rook:
         return new Rook(side);
-      case 'n':
+      case PieceID.Knight:
         return new Knight(side);
-      case 'b':
+      case PieceID.Bishop:
         return new Bishop(side);
-      case 'q':
+      case PieceID.Queen:
         return new Queen(side);
-      case 'k':
+      case PieceID.King:
         return new King(side);
       default:
         throw new BadInputException(`Unknown piece letter: ${pieceLetter}`);
@@ -50,12 +50,12 @@ export class Square {
     if (!this.piece) return null;
 
     const letter = (() => {
-      if (this.piece instanceof Pawn) return 'p';
-      if (this.piece instanceof Rook) return 'r';
-      if (this.piece instanceof Knight) return 'n';
-      if (this.piece instanceof Bishop) return 'b';
-      if (this.piece instanceof Queen) return 'q';
-      if (this.piece instanceof King) return 'k';
+      if (this.piece instanceof Pawn) return PieceID.Pawn;
+      if (this.piece instanceof Rook) return PieceID.Rook;
+      if (this.piece instanceof Knight) return PieceID.Knight;
+      if (this.piece instanceof Bishop) return PieceID.Bishop;
+      if (this.piece instanceof Queen) return PieceID.Queen;
+      if (this.piece instanceof King) return PieceID.King;
 
       throw new InternalStateException(`Unknown piece: ${this.piece}`);
     })();

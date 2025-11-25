@@ -1,11 +1,11 @@
 import { CaptureMove, Move, SimpleMove } from '../moves';
 import { Position } from '../utils/position';
-import { Coord, Direction } from '../types';
+import { Coord, Direction, PieceID } from '../types';
 import { Piece } from './abstract';
-import { IController } from '../state';
+import { IController } from '../controller';
 
 export class King extends Piece {
-  readonly name = 'King';
+  readonly id = PieceID.King;
 
   private generateSimpleMoves(currPosition: Position, { board }: IController): Map<Coord, Move> {
     const possibleEndPositions = [

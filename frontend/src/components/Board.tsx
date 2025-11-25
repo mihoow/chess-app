@@ -1,23 +1,11 @@
-import { Square, type Color, type Coord, Position } from '@chess-app/engine';
+import { Square, type Coord, Position } from '@chess-app/engine';
 import { useState, type PropsWithChildren, useRef } from 'react';
 
-import wPawn from '../assets/white-pawn-svgrepo-com.svg';
-import wRook from '../assets/white-rook-svgrepo-com.svg';
-import wKnight from '../assets/white-knight-svgrepo-com.svg';
-import wBishop from '../assets/white-bishop-svgrepo-com.svg';
-import wQueen from '../assets/white-queen-svgrepo-com.svg';
-import wKing from '../assets/white-king-svgrepo-com.svg';
-
-import bPawn from '../assets/black-pawn-svgrepo-com.svg';
-import bRook from '../assets/black-rook-svgrepo-com.svg';
-import bKnight from '../assets/black-knight-svgrepo-com.svg';
-import bBishop from '../assets/black-bishop-svgrepo-com.svg';
-import bQueen from '../assets/black-queen-svgrepo-com.svg';
-import bKing from '../assets/black-king-svgrepo-com.svg';
 import { cn } from '../utils/class-name';
 import { useGameContext } from '../context';
 import { THEMES } from '../config';
 import { noop } from '../utils/misc';
+import { PieceImg } from './PieceImg';
 
 export function Board() {
   const [selectedFromCoord, setSelectedFromCoord] = useState<Coord | null>(null);
@@ -54,7 +42,7 @@ export function Board() {
   const handleMove = async (fromPosition: Position, toPosition: Position) => {
     setIsAnimating(true);
 
-    const result = makeMove(fromPosition.coord, toPosition.coord);
+    const result = await makeMove(fromPosition.coord, toPosition.coord);
     if (!result.ok) return;
 
     setSelectedFromCoord(null);
@@ -100,7 +88,6 @@ function BoardSquare({
   square: Square;
   position: Position;
   selectedFromCoord: Coord | null;
-  isLastMovePosition: boolean;
   selectFromCoord: (coord: Coord | null) => void;
   makeMove: (fromPosition: Position, toPosition: Position) => Promise<void>;
   pieceRef: (el: HTMLElement | null) => void;
@@ -141,10 +128,10 @@ function BoardSquare({
       }}
     >
       {square.piece ? (
-        <img
+        <PieceImg
           ref={pieceRef}
-          src={getImageSrc(square.piece.name, square.piece.side)}
-          draggable={false}
+          pieceId={square.piece.id}
+          side={square.piece.side}
           className={cn(
             'absolute size-6/8 inset-1/8',
             'select-none pointer-events-none',
@@ -217,21 +204,4 @@ function BoardFrame({ children, className }: PropsWithChildren<{ className?: str
       </div>
     </div>
   );
-}
-
-function getImageSrc(pieceName: string, side: Color) {
-  switch (pieceName) {
-    case 'Pawn':
-      return side === 'white' ? wPawn : bPawn;
-    case 'Rook':
-      return side === 'white' ? wRook : bRook;
-    case 'Knight':
-      return side === 'white' ? wKnight : bKnight;
-    case 'Bishop':
-      return side === 'white' ? wBishop : bBishop;
-    case 'Queen':
-      return side === 'white' ? wQueen : bQueen;
-    case 'King':
-      return side === 'white' ? wKing : bKing;
-  }
 }
