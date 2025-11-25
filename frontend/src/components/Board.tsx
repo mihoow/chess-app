@@ -1,19 +1,24 @@
 import { Square, type Coord, Position } from '@chess-app/engine';
-import { useState, type PropsWithChildren, useRef } from 'react';
+import { useState, type PropsWithChildren, useRef, useEffect } from 'react';
 
 import { cn } from '../utils/class-name';
 import { useGameContext } from '../context';
 import { THEMES } from '../config';
 import { noop } from '../utils/misc';
 import { PieceImg } from './PieceImg';
+import { useClickOutside } from '../hooks/useClickOutside';
+import type { IHistory } from '../type';
 
 export function Board() {
   const [selectedFromCoord, setSelectedFromCoord] = useState<Coord | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const { board, makeMove } = useGameContext();
+  const { board, history, makeMove } = useGameContext();
 
   const boardRef = useRef<HTMLDivElement | null>(null);
   const piecesRef = useRef<Record<Coord, HTMLElement | null>>({});
+
+  useClickOutside(boardRef, () => setSelectedFromCoord(null));
+  useBoardHotkeys({ onDeselect: () => setSelectedFromCoord(null), history });
 
   const animateMove = async (fromPosition: Position, toPosition: Position) => {
     const { current: boardEl } = boardRef;
@@ -42,14 +47,16 @@ export function Board() {
   const handleMove = async (fromPosition: Position, toPosition: Position) => {
     setIsAnimating(true);
 
-    const result = await makeMove(fromPosition.coord, toPosition.coord);
-    if (!result.ok) return;
+    try {
+      const result = await makeMove(fromPosition.coord, toPosition.coord);
+      if (!result.ok) return;
 
-    setSelectedFromCoord(null);
-    await animateMove(fromPosition, toPosition);
-    result.finalize();
-
-    setIsAnimating(false);
+      setSelectedFromCoord(null);
+      await animateMove(fromPosition, toPosition);
+      result.finalize();
+    } finally {
+      setIsAnimating(false);
+    }
   };
 
   return (
@@ -204,4 +211,48 @@ function BoardFrame({ children, className }: PropsWithChildren<{ className?: str
       </div>
     </div>
   );
+}
+
+function useBoardHotkeys({ onDeselect, history }: { onDeselect: VoidFunction; history?: IHistory }) {
+  useEffect(() => {
+    const listener = (e: KeyboardEvent) => {
+      const target = e.target;
+      if (!target || !(target instanceof HTMLElement)) return;
+
+      // Doing nothing when using is typing in an input or textarea
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return;
+      }
+
+      // Esc
+      if (e.key === 'Escape') {
+        onDeselect();
+        return;
+      }
+
+      if (!history) return;
+
+      const isMod = e.ctrlKey || e.metaKey;
+
+      // Ctrl+Z
+      if (isMod && !e.shiftKey && e.key.toLowerCase() === 'z') {
+        e.preventDefault();
+        history?.goBack();
+        return;
+      }
+
+      // Ctrl+Y
+      const isRedoKey =
+        (isMod && (e.key === 'y' || e.key === 'Y')) || (isMod && e.shiftKey && e.key.toLowerCase() === 'z');
+
+      if (isRedoKey) {
+        e.preventDefault();
+        history.goForward();
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+
+    return () => document.removeEventListener('keydown', listener);
+  }, [onDeselect, history]);
 }
