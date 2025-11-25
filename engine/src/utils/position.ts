@@ -66,10 +66,19 @@ export class Position {
     return this.newPosition(this.fileNo + x, this.rank);
   }
 
-  distanceTo(nextPosition: Position): { x: number; y: number } {
+  relativeDistanceTo(nextPosition: Position): { x: number; y: number } {
     return {
-      x: Math.abs(this.fileNo - nextPosition.fileNo),
-      y: Math.abs(this.rank - nextPosition.rank),
+      x: this.fileNo - nextPosition.fileNo,
+      y: this.rank - nextPosition.rank,
+    };
+  }
+
+  distanceTo(nextPosition: Position): { x: number; y: number } {
+    const { x, y } = this.relativeDistanceTo(nextPosition);
+
+    return {
+      x: Math.abs(x),
+      y: Math.abs(y),
     };
   }
 }

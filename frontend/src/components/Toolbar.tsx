@@ -26,14 +26,14 @@ export function Toolbar({ className }: ToolbarProps) {
         'rounded-md h-14 px-4 shadow-lg backdrop-blur'
       )}
     >
-      <div className='flex items-center gap-4'>
-        <div className='flex items-center gap-3 rounded-md px-3 py-1'>
-          <div className='flex items-center gap-2'>
-            <span className={cn('h-3 w-3 rounded-full', 'shadow-sm', sideDotClass)} />
-            <span className='text-sm leading-none font-medium text-slate-200'>{sideLabel}</span>
-          </div>
+      <div className='flex items-center gap-3 rounded-md px-3 py-1'>
+        <div className='flex items-center gap-2'>
+          <span className={cn('h-3 w-3 rounded-full', 'shadow-sm', sideDotClass)} />
+          <span className='text-sm leading-none font-medium text-slate-200'>{sideLabel}</span>
         </div>
+      </div>
 
+      <div className='flex items-center gap-4'>
         {history && (
           <div className='inline-flex rounded-md shadow-sm overflow-hidden border border-slate-700'>
             <button
@@ -68,23 +68,23 @@ export function Toolbar({ className }: ToolbarProps) {
             </button>
           </div>
         )}
-      </div>
 
-      <button
-        type='button'
-        onClick={handleResetClick}
-        className={cn(
-          'inline-flex items-center gap-2',
-          'px-3 h-8 rounded-md',
-          'bg-slate-800 text-slate-200',
-          'hover:bg-slate-700',
-          'text-xs font-semibold tracking-wide uppercase',
-          'focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900',
-          'transition-colors'
-        )}
-      >
-        <span className='text-sm leading-none'>Reset</span>
-      </button>
+        <button
+          type='button'
+          onClick={handleResetClick}
+          className={cn(
+            'inline-flex items-center gap-2',
+            'px-3 h-8 rounded-md border border-slate-700',
+            'bg-slate-800 text-slate-200',
+            'hover:bg-slate-700',
+            'text-xs font-semibold tracking-wide uppercase',
+            'focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900',
+            'transition-colors'
+          )}
+        >
+          <span className='text-sm leading-none'>Reset</span>
+        </button>
+      </div>
     </div>
   );
 }

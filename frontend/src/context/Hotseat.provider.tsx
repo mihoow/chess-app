@@ -86,6 +86,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
       winner: game.winner,
       sideToMove: game.sideToMove,
       board: game.getBoard(),
+      lastMoveCoord: history.lastMoveCoord,
     };
   });
   const themeHook = useBoardTheme();
@@ -95,7 +96,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
 
     try {
       game.makeMove({ from: fromCoord, to: toCoord });
-      history.push(game.getFEN());
+      history.push(game.getFEN(), toCoord);
 
       toast.dismiss(); // delete all active toasts
 
@@ -108,6 +109,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
               winner: game.winner,
               sideToMove: game.sideToMove,
               board: game.getBoard(),
+              lastMoveCoord: toCoord,
             });
 
             resolve();
@@ -128,10 +130,11 @@ export function HotseatProvider({ children }: PropsWithChildren) {
       winner: newGame.winner,
       sideToMove: newGame.sideToMove,
       board: newGame.getBoard(),
+      lastMoveCoord: null,
     });
   };
 
-  const historyAPI = useHistoryApi(history, (fen) => {
+  const historyAPI = useHistoryApi(history, (fen, lastMoveCoord) => {
     const game = gameRef.forceState(fen);
 
     setGameState({
@@ -139,6 +142,7 @@ export function HotseatProvider({ children }: PropsWithChildren) {
       winner: game.winner,
       sideToMove: game.sideToMove,
       board: game.getBoard(),
+      lastMoveCoord,
     });
   });
 

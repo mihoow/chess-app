@@ -1,4 +1,4 @@
-import type { Color, GameStatus, Position, Square } from '@chess-app/engine';
+import type { Color, Coord, GameStatus, Position, Square } from '@chess-app/engine';
 
 export type BoardThemeId = 'classic' | 'forest' | 'dark';
 
@@ -11,6 +11,7 @@ export type BoardTheme = {
 export interface IHistory {
   canGoBack: boolean;
   canGoForward: boolean;
+  lastMoveCoord: Coord | null;
 
   goBack(): void;
   goForward(): void;
@@ -21,4 +22,5 @@ export type GameState = {
   winner: Color | null;
   sideToMove: Color;
   board: Array<[Position, Square]>;
+  lastMoveCoord: Coord | null;
 };
